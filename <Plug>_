@@ -1,0 +1,51 @@
+<template>
+  <div>
+    <nav class="navbar is-primary" role="navigation" aria-label="dropdown navigation">
+      <div class="navbar-brand">
+        <span class="navbar-item">
+          Z Print
+        </span>
+      </div>
+    </nav>
+    <div v-for="menu in menus" id="menu">
+      <div class="columns">
+        <div class="column is-12">
+          <span>
+            a
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  name: 'Navbar',
+  data(){
+    return{
+      menus: [
+        {name: 'User'},
+        {name: 'Escritorio'},
+        {name: 'Punto de Venta'},
+        {name: 'Principal'},
+        {name: 'Inventario'},
+        {name: 'Reportes'},
+        {name: 'Configuraciones'},
+        {name: 'Suscripción'}
+      ]
+    }
+  }
+})
+</script>
+
+<style>
+#menu{
+  display: flex;
+  background-color: green;
+  width: 500px;
+  height: 92.4vh;
+}
+</style>
