@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="js">
 import { Line, mixins } from 'vue-chartjs';
 import { ChartData } from 'chart.js';
 

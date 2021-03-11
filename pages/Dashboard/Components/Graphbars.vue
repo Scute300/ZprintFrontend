@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import LineChart from './Graphbars.graph.vue'
+import LineChart from './Graphbars.graph'
 export default Vue.extend({
   name: "Graphbars",
   components: {LineChart},
