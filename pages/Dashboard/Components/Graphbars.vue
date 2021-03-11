@@ -11,7 +11,7 @@
             </select>
           </div>
         </div>
-        <line-chart :chartdata="datasets" :options="options"></line-chart>
+        <line-chart :chartData="dataCollection" :options="options"></line-chart>
       </div>
     </div>
   </div>
@@ -25,17 +25,19 @@ export default Vue.extend({
   components: {LineChart},
   data(){
     return{
+      dataCollection:{
+      labels:[14, 100],
       datasets: [
         {
           label: 'Data One',
           backgroundColor: '#f87979',
-          data: [300, 900]
+          data: [10, 100]
         }, {
           label: 'Data One',
           backgroundColor: '#f87979',
-          data: [200, 900]
+          data: [12, 100]
         }
-      ],
+      ]},
       options: {
         responsive: true,
         maintainAspectRatio: false
