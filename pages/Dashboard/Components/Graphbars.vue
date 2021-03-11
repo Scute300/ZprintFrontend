@@ -11,7 +11,7 @@
             </select>
           </div>
         </div>
-        <line-chart :chart-data="datasets" :options="options"></line-chart>
+        <line-chart :chartdata="datasets" :options="options"></line-chart>
       </div>
     </div>
   </div>
