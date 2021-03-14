@@ -43,7 +43,7 @@ export default {
     scss: ['./styles/main.scss']
   },
   axios: {
-    baseURL: 'http://127.0.0.1:3333/'
+    baseURL: 'https://zprintback.herokuapp.com/'
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
