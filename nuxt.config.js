@@ -42,7 +42,9 @@ export default {
   styleResources: {
     scss: ['./styles/main.scss']
   },
-  axios: {},
+  axios: {
+    baseURL: 'http://127.0.0.1:3333/'
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
