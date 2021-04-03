@@ -82,7 +82,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    GoRoute(param) {
+    GoRoute(param :string ) {
       this.$router.push(param)
     },
   },
