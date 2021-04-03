@@ -35,13 +35,13 @@ export default Vue.extend({
       showMenu: true,
       menus: [
         {name: 'User', icon: 'fas fa-user fa-2x'},
-        {name: 'Escritorio', icon: 'fas fa-chart-line fa-2x'},
-        {name: 'Punto de Venta', icon: 'fas fa-store fa-2x'},
+        {name: 'Escritorio', icon: 'fas fa-chart-line fa-2x', route: 'Dashboard'},
+        {name: 'Punto de Venta', icon: 'fas fa-store fa-2x', route:'Inventario'},
         {name: 'Principal', icon:'fas fa-th-large fa-2x', route: 'Main'},
         {name: 'Inventario', icon: 'fas fa-clipboard-list fa-2x'},
         {name: 'Reportes', icon: 'fas fa-chart-pie fa-2x'},
         {name: 'Configuraciones', icon: 'fas fa-cog fa-2x'},
-        {name: 'Suscripción', icon:'fas fa-project-diagram fa-2x'}
+        {name: 'Suscripción', icon:'fas fa-project-diagram fa-2x', route: 'Payment'}
       ]
     }
   },
