@@ -11,7 +11,7 @@
       <div class="container">
         <div v-for="menu in menus" class="columns is-vcentered">
           <div class="column is-12" id="menuContainer">
-            <a @click="goLink(menu.route)">
+            <a :href="menu.route">
             <span class="icon-text">
               <span class="icon is-large">
                 <i id="icon" :class="menu.icon"/>
@@ -35,13 +35,13 @@ export default Vue.extend({
       showMenu: true,
       menus: [
         {name: 'User', icon: 'fas fa-user fa-2x'},
-        {name: 'Escritorio', icon: 'fas fa-chart-line fa-2x', route: 'Dashboard'},
-        {name: 'Punto de Venta', icon: 'fas fa-store fa-2x', route:'Inventario'},
-        {name: 'Principal', icon:'fas fa-th-large fa-2x', route: 'Main'},
+        {name: 'Escritorio', icon: 'fas fa-chart-line fa-2x', route: '/Dashboard'},
+        {name: 'Punto de Venta', icon: 'fas fa-store fa-2x', route:'/Inventario'},
+        {name: 'Principal', icon:'fas fa-th-large fa-2x', route: '/Main'},
         {name: 'Inventario', icon: 'fas fa-clipboard-list fa-2x'},
         {name: 'Reportes', icon: 'fas fa-chart-pie fa-2x'},
         {name: 'Configuraciones', icon: 'fas fa-cog fa-2x'},
-        {name: 'Suscripción', icon:'fas fa-project-diagram fa-2x', route: 'Payment'}
+        {name: 'Suscripción', icon:'fas fa-project-diagram fa-2x', route: '/Payment'}
       ]
     }
   },
