@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue'
 import Navbar from '../../../../components/Navbar'
 import HeaderDetailScreen from '../../../../components/HeaderDetailsScreen'
@@ -26,7 +26,7 @@ export default Vue.extend({
     return {}
   },
   methods: {
-    GoRoute(param: string) {
+    GoRoute(param) {
       this.$router.push(param)
     },
   },
