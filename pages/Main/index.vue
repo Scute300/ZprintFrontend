@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <div class="container">
-      <div class="columns is-multiline is-mobile">
+      <div class="columns is-multiline">
         <div v-for="menu in menus" class="column is-3">
           <a v-on:click="GoRoute(menu.route)">
             <div class="box" :style="{ backgroundColor: menu.color, display: 'flex', justifyContent: 'center' }">
