@@ -11,7 +11,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in items">
+            <tr v-for="item in filterColumns(items, filter)">
               <td>
                 {{item.name}}
               </td>
@@ -19,7 +19,9 @@
                 <button class="button is-success">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="button is-danger">
+                <button 
+                  @click="deleteItem(tipo, item.id)"
+                  class="button is-danger">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
@@ -36,10 +38,22 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'TableMarcasyProductos',
-  props:{
-    items:{
+  props: {
+    items: {
       type: Array,
-      required:true
+      required:true,
+    },
+    filter: {
+      type: String,
+      required: true,
+    },
+    deleteI: {
+      type: Function,
+      required: false,
+    },
+    tipo: {
+      type: String,
+      required: true
     }
   },
   mounted(){
@@ -56,6 +70,17 @@ export default Vue.extend({
   methods:{
     goLink(param){
       this.$router.push(param)
+    },
+    filterColumns(elements, condition){
+      if(condition !== ''){
+        const preview = elements.filter( item => item.name === condition )
+        return preview
+      } else {
+        return elements
+      }
+    },
+    deleteItem(type, id){
+      this.deleteI(type, id)
     }
   }
 

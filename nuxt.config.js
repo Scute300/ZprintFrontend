@@ -40,10 +40,10 @@ export default {
   ],
 
   styleResources: {
-    scss: ['./styles/main.scss']
+    scss: ['./styles/main.scss'],
   },
   axios: {
-    baseURL: 'https://zprintback.herokuapp.com/'
+    baseURL: 'http://localhost:3333/',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

@@ -3,7 +3,9 @@
     <div class="columns is-centered">
       <div class="column is-narrow">
         <figure class="image is-256x256">
-          <img src="https://bulma.io/images/placeholders/128x128.png">
+          <img 
+          style="width: 256px; height: 256px;"
+          :src="image !== '' ? image : 'https://i.ibb.co/0Jmshvb/no-image.png'">
         </figure>
       </div>
     </div>
@@ -11,7 +13,7 @@
       <div class="column is-narrow">
         <div class="file is-normal has-name"  >
           <label class="file-label">
-            <input class="file-input" type="file" name="resume"/>
+            <input class="file-input" type="file" name="resume" @change="changeFile"/>
             <span class="file-cta">
               <span class="file-icon">
                 <i class="fas fa-upload" />
@@ -36,6 +38,16 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'ImageComponent',
   components: {
+  },
+  props:{
+    image: {
+      type: String,
+      required: true
+    },
+    changeFile: {
+      type: Function,
+      required: true
+    }
   },
   data() {
     return {}

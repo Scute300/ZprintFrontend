@@ -85,6 +85,25 @@
                             </th>
                           </tr>
                         </thead>
+                        <tbody>
+                          <tr v-for="product in products">
+                            <td>
+                              {{product.marca}}
+                            </td>
+                            <td>
+                              {{product.producto}}
+                            </td>
+                            <td>
+                              {{product.existencias}}
+                            </td>
+                            <td>
+                              {{product.valor_total}}
+                            </td>
+                            <td>
+                              {{product.costo_total}}
+                            </td>
+                          </tr>
+                        </tbody>
                       </table>
                     </div>
                   </div>
@@ -106,6 +125,9 @@ export default Vue.extend({
   components: {
     Navbar,
     HeaderDetailScreen,
+  },
+  mounted(){
+    this.getProducts()
   },
   data() {
     return {
@@ -161,12 +183,32 @@ export default Vue.extend({
           name: 'Utilidad',
         },
       ],
+      products: []
     }
   },
+
   methods: {
     GoRoute(param) {
       this.$router.push(param)
     },
+    getProducts(){
+      const token = JSON.parse(localStorage.getItem('token'))
+      this.$axios.get('/api/getProducts', 
+        { headers: { Authorization: `Bearer ${token.token}` } }
+      ).then(response => {
+        const parse = response.data.data.map( ( product ) => {
+          return {
+            marca: product.marca.name,
+            producto: product.product_name,
+            existencias: product.existencias,
+            valor_total: product.precio * product.existencias,
+            costo_total: product.costo * product.existencias,
+            utilidad: ''
+          }
+        })
+        this.products = parse
+      })
+    }
   },
 })
 </script>

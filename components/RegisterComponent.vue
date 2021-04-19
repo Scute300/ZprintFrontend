@@ -92,7 +92,7 @@ export default Vue.extend({
         password: this.password,
         password_confirmation: this.password_confirmation
       }).then(response =>{
-        this.loading = false
+        localStorage.setItem('token', JSON.stringify(response.data.data))
         this.$router.push('/Dashboard')
       }).catch(error =>{
         this.loading = false

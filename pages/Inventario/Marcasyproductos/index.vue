@@ -21,13 +21,16 @@
                 <div class="field has-addons">
                   <div class="control">
                     <input
+                      v-model="myInput[tipo.id]"
                       class="input"
                       type="text"
                       :placeholder="`Agregar o buscar ${tipo.id}`"
                     />
                   </div>
                   <div class="control">
-                    <a class="button is-success">
+                    <a
+                      @click="add(tipo.id, myInput[tipo.id])"
+                      class="button is-success">
                       <i class="fas fa-save" />
                     </a>
                   </div>
@@ -36,6 +39,9 @@
             </div>
             <TableMarcasyProductos
               :items="tipo.contenido"
+              :filter="myInput[tipo.id]"
+              :deleteI="deleteI"
+              :tipo="tipo.id"
             />
           </div>
         </div>
@@ -52,24 +58,103 @@ export default Vue.extend({
   components: {
     Navbar,TableMarcasyProductos
   },
+  mounted(){
+    this.getInitials()
+  },
   data() {
     return {
+      myInput: {
+        marca: '',
+        departamento: '',
+      },
       tipos : [
         {
           id: 'marca',
           nombre: 'Marcas',
-          contenido: [{name: 'Example', id: '0'}]
+          contenido: []
         },
         {
           id: 'departamento',
           nombre: 'Departamento',
-          contenido: [{name: 'Example', id: '0'}]
+          contenido: []
         }
       ]
     }
   },
   methods: {
-  },
+    add(type, nombreProduct){
+      const token = JSON.parse(localStorage.getItem('token'))
+      switch(type){
+        case 'marca':
+          this.$axios.post('/api/newMarca', {
+            nombre: nombreProduct
+          },  { headers: { Authorization: `Bearer ${token.token}` } })
+            .then(response => {
+              this.tipos[0].contenido.push({
+                name: nombreProduct,
+                id: response.data.id
+              })
+            })
+        break;
+        case 'departamento' :
+          this.$axios.post('/api/newDepartamento', {
+            nombre: nombreProduct
+          },  { headers: { Authorization: `Bearer ${token.token}` } })
+            .then(response => {
+              this.tipos[1].contenido.push({
+                name: nombreProduct,
+                id: response.data.id
+              })
+            })
+        break;
+      }
+    },
+    getInitials(){
+      const token = JSON.parse(localStorage.getItem('token'))
+      this.$axios.get('/api/marcasydepartamentos',
+        { headers: { Authorization: `Bearer ${token.token}` } }
+      ).then(response => {
+        console.log(response.data)
+        const marcas = response.data?.marcas?.map( ( marca ) => {
+          return {
+            name: marca.name,
+            id: marca.id
+          }
+        })  ;
+
+        const departamentos = response.data?.departaments?.map( ( departament ) => {
+          return {
+            name: departament.name,
+            id: departament.id
+          }
+        })
+
+        this.tipos[0].contenido = marcas
+        this.tipos[1].contenido = departamentos
+      })
+    },
+    deleteI(type, id){
+      const token = JSON.parse(localStorage.getItem('token'))
+      switch(type){
+        case 'marca' :
+          this.$axios.delete('/api/eliminarMarca/'+id,
+            { headers: { Authorization: `Bearer ${token.token}` } }
+          ).then(response => {
+              const newMarcaArray = this.tipos[0].contenido.filter( item => item.id !== id )
+              this.tipos[0].contenido = newMarcaArray
+          })
+        break;
+        case 'departamento':
+          this.$axios.delete('/api/eliminarDepartamento/'+id,
+            { headers: { Authorization: `Bearer ${token.token}` } }
+          ).then(response => {
+              const newMarcaArray = this.tipos[1].contenido.filter( item => item.id !== id )
+              this.tipos[1].contenido = newMarcaArray
+          })
+        break;
+      }
+    }
+  }
 })
 </script>
 

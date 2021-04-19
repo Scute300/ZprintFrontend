@@ -39,7 +39,7 @@ export default Vue.extend({
         {
           name: 'Ingresar Productos',
           icon: require('../../assets/icons/049-login.png'),
-          route: '',
+          route: 'Inventario/Detail/New/Product',
           color: '#F396A8',
         },
         {
@@ -69,7 +69,7 @@ export default Vue.extend({
         {
           name: 'Marcas y Departamentos',
           icon: require('../../assets/icons/001-online store.png'),
-          route: '',
+          route: 'Inventario/Marcasyproductos',
           color: '#72A7DB',
         },
         {
