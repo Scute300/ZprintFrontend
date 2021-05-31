@@ -73,7 +73,7 @@ export default Vue.extend({
     },
     filterColumns(elements, condition){
       if(condition !== ''){
-        const preview = elements.filter( item => item.name === condition )
+        const preview = elements?.filter( item => item.name === condition )
         return preview
       } else {
         return elements

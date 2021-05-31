@@ -228,6 +228,7 @@ export default Vue.extend({
         return;
         this.createImage(files[0]);
         this.formulario.file = files[0];
+        console.log(this.cheateImage)
     },
     createImage(file) {
         let image = new Image();
