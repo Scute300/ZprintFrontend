@@ -101,6 +101,7 @@
                         >
                           <option
                             v-for="marca in selects.marcas"
+                            :value="marca.id"
                           >
                           {{marca.name}}
                           </option>
@@ -118,6 +119,7 @@
                           v-model="formulario.departamento"
                         >
                           <option
+                            :value="departamento.id"
                             v-for="departamento in selects.departamentos"
                           >
                           {{departamento.name}}
@@ -178,6 +180,7 @@ export default Vue.extend({
         marcas: [],
         departamentos: []
       },
+      fileTosend: [],
       formulario:{
         image: '',
         imagen: {},
@@ -223,11 +226,12 @@ export default Vue.extend({
       })
     },   
     onFileChange(e) {
-        let files = e.target.files || e.dataTransfer.files;
+        console.log(e)
+        let files = e.target.files || e.dataTransfer.files; 
         if (!files.length)
         return;
+        this.fileTosend = files[0]
         this.createImage(files[0]);
-        this.formulario.file = files[0];
         console.log(this.cheateImage)
     },
     createImage(file) {
@@ -241,18 +245,20 @@ export default Vue.extend({
         reader.readAsDataURL(file);
     },
     sendForm(){
-      const token = JSON.parse(localStorage.getItem('token'))
-      this.$axios.post('/api/newProduct',{
-        marca_id: this.formulario.marca,
-        departament_id: this.formulario.departamento,
-        product_name: this.formulario.nombre,
-        codigo_de_barras: this.formulario.codigoDeBarras,
-        precio1: this.formulario.precio,
-        precio2: this.formulario.precio2,
-        costo: this.formulario.costo,
-        especificaciones: this.formulario.especificaciones,
-        existencia: this.formulario.existencias,
-      },   { headers: { Authorization: `Bearer ${token.token}` } } )
+        const token = JSON.parse(localStorage.getItem('token'))
+        const formSend = new FormData()
+        formSend.append('imageProduct', this.fileTosend)
+        formSend.append('marca_id', this.formulario.marca) 
+        formSend.append('departament_id', this.formulario.departamento)
+        formSend.append('product_name', this.formulario.nombre)
+        formSend.append('codigo_de_barras', this.formulario.codigoDeBarras)
+        formSend.append('precio1', this.formulario.precio)
+        formSend.append('precio2', this.formulario.precio2)
+        formSend.append('costo', this.formulario.costo)
+        formSend.append('especificaciones', this.formulario.especificaciones)
+        formSend.append('existencias', this.formulario.existencias)
+        this.$axios.post('/api/newProduct', formSend,   
+            { headers: { Authorization: `Bearer ${token.token}` } } )
         .then( response => {
           this.$router.push('/Inventario/Detail')
         })

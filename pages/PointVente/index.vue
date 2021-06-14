@@ -75,7 +75,12 @@
                                         <p class="title is-4">{{product.name}}</p>
                                         <div class="columns">
                                             <div class="column is-3">
-                                                <input class="input is-success" type="number" :value="product.cantidad" disabled @change="changeProduct(index, $event)">  
+                                                <input 
+                                                    class="input is-success" 
+                                                    type="number" 
+                                                    :value="product.cantidad" 
+                                                    disabled @change="changeProduct(index, $event)"
+                                                >  
                                             </div>
                                             <div class="column is-1">
                                                 <button class="button is-success" @click="changeProduct(index, '+')">+</button> 
@@ -109,9 +114,21 @@
                     
                 </div>
                 <div class="column is-5 is-vcentered" id="totalPriceContainer">
-                   <p class="title is-3" style="color: white;">
-                    Total: {{priceVente()}} $
-                   </p> 
+                   <div
+                       v-if="venta.length > 0"
+                       class="columns"
+                    >
+                       <button class="button is-success is-fullwidth"
+                            @click="vender"
+                        >
+                            Vender
+                       </button>
+                   </div>
+                   <div class="columns">
+                       <p class="title is-3" style="color: white;">
+                        Total: {{priceVente()}} $
+                       </p>    
+                   </div> 
                 </div>
             </div>
         </div>
@@ -125,13 +142,12 @@
         components: {
             Navbar
         },
+        mounted(){
+            this.getProducts()
+        },
         data(){
             return{
-                products: [
-                    { name: 'abrazadera', id: 0, image: "https://carritoferretero.com/wp-content/uploads/2018/05/products-abrazadera-de-arranque-carrito-ferretero_2.png", price: 20, existencias: 3},
-                    { name: 'tuerca', id: 1, image: "https://cdn.homedepot.com.mx/productos/819576/819576-d.jpg", price: 40, existencias: 5},
-                    { name: 'martillo', id: 2, image: "https://cdn.homedepot.com.mx/productos/680442/680442-d.jpg", price: 50, existencias: 7}
-                ],
+                products: [],
                 venta: [
 
                 ],
@@ -178,6 +194,44 @@
                     }
                 }
                 this.venta.splice(index, 1, newObj)
+            },
+            getProducts(){
+                const token = JSON.parse(localStorage.getItem('token'))
+                this.$axios.get('api/getProducts', {
+                     headers: { Authorization: `Bearer ${token.token}` } 
+                }).then( response  =>{
+                    const newArray = response.data.data.map( item => {
+                        return {
+                            id: item.id,
+                            name: item.product_name,
+                            image: item.image,
+                            price: item.precio,
+                            existencias: item.existencias
+                        }
+                    }) 
+                    this.products = newArray
+                })
+            },
+            vender(){
+                const ids = this.venta.map( (item) => {
+                   return {
+                        id: item.id,
+                        cantidad: item.cantidad,
+                        name: item.name
+                   } 
+                })
+
+                const token = JSON.parse(localStorage.getItem('token'))
+
+                this.$axios.post('/api/newVenta', {
+                    products: ids,
+                    cantidad: this.total
+                }, { headers: { Authorization: `Bearer ${token.token}` } })
+                .then( () => {
+                    this.venta = []
+                    this.getProducts()
+                    alert('Venta realizada')    
+                })
             }
         }
     })
@@ -198,12 +252,12 @@
     max-height: 800px;
  }
  #canastaContainer {
-    height: 730px;
-    max-height: 730px
+    height: 700px;
+    max-height: 700px
  }
  #totalPriceContainer {
     background-color: #00D1B2;
-    height: 70px;
+    height: 80px;
  }
 </style>
 
