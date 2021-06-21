@@ -1,6 +1,6 @@
 <template>
   <div id="menu2">
-    <nav class="navbar is-fixed-top is-primary" role="navigation" aria-label="dropdown navigation">
+    <nav class="navbar is-fixed-top is-primary navTop" role="navigation" aria-label="dropdown navigation">
       <div class="navbar-brand">
         <span class="navbar-item">
           Z Print
@@ -55,6 +55,9 @@ export default Vue.extend({
 </script>
 
 <style>
+.navTop{
+    z-index: 2 !important;
+}
 #menu{
   background-color: #00D1B2;
   width: 50px;

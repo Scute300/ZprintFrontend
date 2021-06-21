@@ -157,7 +157,6 @@
         methods: {
             addProduct(id, index){
                 let busqueda = this.venta.find( item => item.id == id)
-                console.log(busqueda)
                 if(typeof(busqueda) == 'undefined'){
                     let newObj = this.products[index]
                     newObj.cantidad = 1
@@ -225,7 +224,7 @@
 
                 this.$axios.post('/api/newVenta', {
                     products: ids,
-                    cantidad: this.total
+                    cantidad: this.priceVente()
                 }, { headers: { Authorization: `Bearer ${token.token}` } })
                 .then( () => {
                     this.venta = []
