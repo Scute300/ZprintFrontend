@@ -45,7 +45,7 @@ export default Vue.extend({
         {
           name: 'Historial de Caja',
           icon: require('../../assets/icons/006-money3.png'),
-          route: '',
+          route: '/Logs',
           color: '#F396A8',
         },
         {

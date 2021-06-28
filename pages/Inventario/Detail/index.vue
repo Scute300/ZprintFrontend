@@ -16,7 +16,7 @@
                   :style="{ backgroundColor: value.color }"
                 >
                   <p class="title is-4 boxCantidad">
-                    {{ value.price }} $
+                    {{ value.price }} 
                   </p>
                 </div>
                 <div class="boxBody">
@@ -75,39 +75,15 @@
                   </div>
                 </div>
                 <div class="columns">
-                  <div class="column is-12">
-                    <div class="table-container">
-                      <table class="table is-fullwidth">
-                        <thead>
-                          <tr>
-                            <th v-for="tableHead in tableHeads">
-                              {{ tableHead.name }}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="product in products">
-                            <td>
-                              {{product.marca}}
-                            </td>
-                            <td>
-                              {{product.producto}}
-                            </td>
-                            <td>
-                              {{product.existencias}}
-                            </td>
-                            <td>
-                              {{product.valor_total}}
-                            </td>
-                            <td>
-                              {{product.costo_total}}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+                <Table
+                  :headers="tableHeads"
+                  :columns="products"
+                  :lastPage="lastPage"
+                  :currentPage="page"
+                  :onChangePage="getProducts"
+                />
+                  
+                </div> 
               </div>
             </div>
           </div>
@@ -121,13 +97,16 @@
 import Vue from 'vue'
 import Navbar from '../../../components/Navbar'
 import HeaderDetailScreen from '../../../components/HeaderDetailsScreen'
+import Table from '../../../components/Table'
 export default Vue.extend({
   components: {
     Navbar,
     HeaderDetailScreen,
+    Table
   },
   mounted(){
-    this.getProducts()
+    this.getTotales()
+    this.getProducts(1)
   },
   data() {
     return {
@@ -136,53 +115,37 @@ export default Vue.extend({
           name: 'Valor del Inventario',
           id: 'inventoryValue',
           color: '#81C784',
-          price: 500,
+          price: 0,
         },
         {
           name: 'Costo del Inventario',
           id: 'inventoryCoast',
           color: '#4DB6AC',
-          price: 8000,
+          price: 0,
         },
         {
           name: 'Utilidad',
           id: 'utily',
           color: '#4FC3F7',
-          price: 9999,
+          price: 0,
         },
         {
           name: 'Productos y Existencias',
           id: 'products',
           color: '#FFB74D',
-          price: 8000,
+          price: 0,
         },
       ],
       tableHeads: [
-        {
-          id: 'marca',
-          name: 'Marca',
-        },
-        {
-          id: 'productos',
-          name: 'Productos',
-        },
-        {
-          id: 'existencias',
-          name: 'Existencias',
-        },
-        {
-          id: 'valor',
-          name: 'Valor Total',
-        },
-        {
-          id: 'costo',
-          name: 'Costo Total',
-        },
-        {
-          id: 'utilidad',
-          name: 'Utilidad',
-        },
+        'Marca',
+        'Productos',
+        'Existencias',
+        'Valor Total',
+        'Costo Total',
+        'Utilidad' 
       ],
+      page: 0,
+      lastPage: 1,
       products: []
     }
   },
@@ -191,22 +154,36 @@ export default Vue.extend({
     GoRoute(param) {
       this.$router.push(param)
     },
-    getProducts(){
+    getProducts(page){
+      this.page = page
       const token = JSON.parse(localStorage.getItem('token'))
-      this.$axios.get('/api/getProducts', 
+      this.$axios.get('/api/getProducts/'+this.page, 
         { headers: { Authorization: `Bearer ${token.token}` } }
-      ).then(response => {
-        const parse = response.data.data.map( ( product ) => {
+      ).then(({data}) => {
+        const parse = data.data.data.map( ( product ) => {
           return {
+            id: product.id,
             marca: product.marca.name,
             producto: product.product_name,
             existencias: product.existencias,
             valor_total: product.precio * product.existencias,
             costo_total: product.costo * product.existencias,
-            utilidad: ''
+            utilidad: product.precio * product.existencias - product.costo * product.existencias 
           }
         })
+        this.lastPage = data.data.meta.last_page
         this.products = parse
+      })
+    },
+    getTotales(){
+      const token = JSON.parse(localStorage.getItem('token'))
+      this.$axios.get('/api/totalInventario', 
+        { headers: { Authorization: `Bearer ${token.token}` } }
+      ).then(({data}) => {
+          this.values[0].price = `${data.data.precio}$`
+          this.values[1].price = `${data.data.costo}$`
+          this.values[2].price = `${data.data.utilidad}$`
+          this.values[3].price = data.data.unidades
       })
     }
   },
