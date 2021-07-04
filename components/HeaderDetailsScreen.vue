@@ -1,6 +1,6 @@
 <template>
   <div class="columns">
-    <div class="column is-9 is-offset-3">
+    <div class="column is-9 is-offset-3 contentHeaderMenu">
       <button
         @click="GoRoute(menuHeader.url)"
         v-for="menuHeader in menuHeaders"
@@ -17,26 +17,14 @@
 import Vue from 'vue'
 export default Vue.extend({
   components: {},
+  props: {
+    menuHeaders: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
-      menuHeaders: [
-        {
-          name: 'Detalle del Inventario',
-          url: '/Inventario/Detail',
-        },
-        {
-          name: 'Nuevo Producto',
-          url: '/Inventario/Detail/New/Product',
-        },
-        {
-          name: 'Nuevo Servicio',
-          url: '/New/Service',
-        },
-        {
-          name: 'Lista de Productos y Servicios',
-          url: '/Listadosyservicios',
-        },
-      ],
     }
   },
   methods: {
@@ -51,5 +39,12 @@ export default Vue.extend({
 #mySpan {
   margin-left: 8px !important;
   font-size: 10px;
+}
+
+.contentHeaderMenu { 
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;     /* changed from align-content */
+  justify-content: flex-end; /* optional */
 }
 </style>

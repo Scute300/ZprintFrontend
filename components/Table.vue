@@ -2,25 +2,51 @@
   <div class="container alignTable">
     <div class="columns">
       <div class="column is-12">
-        <table class="table is-fullwidth is-bordered">
-          <thead>
-              <th v-for="header in headers">
-                {{ header }}
-              </th>
-          </thead>
-          <tbody>
-            <tr v-for="column in columns">
-              <td 
-                v-for="item in renderObject(column)"
-              >
-                {{ item }}
-              </td>
-            </tr>
-          </tbody>    
-        </table>
+        <div class="table-container">
+          <table class="table is-fullwidth is-bordered">
+            <thead>
+                <th v-for="header in headers">
+                  {{ header }}
+                </th>
+                <th
+                  v-if="deleteAction !== undefined"
+                >
+                  Acciones
+                </th>
+            </thead>
+            <tbody>
+              <tr v-for="column in columns">
+                <td 
+                  v-for="(item, key, index) in column"
+                  v-if="key !== 'id'"
+                >
+                  {{ item }}
+                </td>
+                <td
+                  v-if="deleteAction !== undefined || editAction !== undefined"
+                >
+                  <button 
+                    v-if="deleteAction !== undefined"
+                    class="button is-danger"
+                    @click="deleteAction(column.id)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                  <button
+                    v-if="editAction !== undefined"
+                    @click="$router.push(editAction)"
+                    class="button is-success"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>    
+          </table> 
+        </div>
       </div> 
     </div>
-    <div class="columns">
+    <div class="columns is-mobile">
       <div class="column is-12">
         <nav class="pagination" role="navigation" aria-label="pagination">
           <a
@@ -76,9 +102,22 @@
       onChangePage: {
         type: Function,
         required: true
+      },
+      deleteAction: {
+        type: Function,
+        required: false
+      },
+      editAction: {
+        type: String,
+        required: false
       }
     },
     computed:{
+      renderObject : (obj) => {
+        const newObj = obj
+        delete newObj.id
+        return obj
+      },
     },
     methods:{
       paginate(){
@@ -87,10 +126,6 @@
           pages.push(i)
         }
         return pages
-      },
-      renderObject(obj){
-        delete obj.id
-        return obj
       },
       changePage(type, page){
         let newPage = 1
@@ -109,7 +144,7 @@
             }
           break
         } 
-      }
+      }, 
     }
   }
 </script>

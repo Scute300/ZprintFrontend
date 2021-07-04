@@ -2,7 +2,9 @@
   <div>
     <Navbar />
     <div class="container">
-      <HeaderDetailScreen />
+      <HeaderDetailScreen 
+         :menuHeaders="menuHeaders"
+      />
       <div class="columns">
         <div class="column is-3">
           <div 
@@ -81,6 +83,7 @@
                   :lastPage="lastPage"
                   :currentPage="page"
                   :onChangePage="getProducts"
+                  :deleteAction="deleteProduct"
                 />
                   
                 </div> 
@@ -146,7 +149,25 @@ export default Vue.extend({
       ],
       page: 0,
       lastPage: 1,
-      products: []
+      products: [],
+      menuHeaders: [
+        {
+          name: 'Detalle del Inventario',
+          url: '/Inventario/Detail',
+        },
+        {
+          name: 'Nuevo Producto',
+          url: '/Inventario/Detail/New/Product',
+        },
+        {
+          name: 'Nuevo Servicio',
+          url: '/New/Service',
+        },
+        {
+          name: 'Lista de Productos y Servicios',
+          url: '/Listadosyservicios',
+        },
+      ],
     }
   },
 
@@ -184,6 +205,15 @@ export default Vue.extend({
           this.values[1].price = `${data.data.costo}$`
           this.values[2].price = `${data.data.utilidad}$`
           this.values[3].price = data.data.unidades
+      })
+    },
+    deleteProduct(id){
+      const token = JSON.parse(localStorage.getItem('token'))
+      this.$axios.delete('/api/deleteProduct/'+id, {
+        headers: { Authorization: `Bearer ${token.token}` }
+      }).then(()=> {
+        this.getTotales()
+        this.getProducts(this.page)
       })
     }
   },

@@ -19,7 +19,9 @@ export default {
   css: [{ src: './styles/main.scss', lang: 'scss' }, { src: './styles/globalStyles.css', lang: 'css'}],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/vue-js-toggle-button', ssr: false }
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

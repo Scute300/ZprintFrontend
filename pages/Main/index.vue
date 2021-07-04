@@ -57,13 +57,13 @@ export default Vue.extend({
         {
           name: 'Gastos',
           icon: require('../../assets/icons/042-shopping cart.png'),
-          route: '',
+          route: '/Gastos/nuevo',
           color: '#9CD77D',
         },
         {
           name: 'Prestamos',
           icon: require('../../assets/icons/021-sales2.png'),
-          route: '',
+          route: '/Prestamos',
           color: '#C6D18F',
         },
         {
@@ -81,7 +81,7 @@ export default Vue.extend({
         {
           name: 'Empleados',
           icon: require('../../assets/icons/workers.png'),
-          route: '',
+          route: '/Empleados',
           color: '#9A73B2',
         },
         {

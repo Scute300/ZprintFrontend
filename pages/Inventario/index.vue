@@ -41,25 +41,7 @@ export default Vue.extend({
           icon: require('../../assets/icons/049-login.png'),
           route: 'Inventario/Detail/New/Product',
           color: '#F396A8',
-        },
-        {
-          name: 'Egresar Productos',
-          icon: require('../../assets/icons/050-logout.png'),
-          route: '',
-          color: '#BE7DB7',
-        },
-        {
-          name: 'Historial de Ingresos',
-          icon: require('../../assets/icons/historialingresos.png'),
-          route: '',
-          color: '#F8BB85',
-        },
-        {
-          name: 'Historial de egresos',
-          icon: require('../../assets/icons/historialegresos.png'),
-          route: '',
-          color: '#9CD77D',
-        },
+        },  
         {
           name: 'Detalles del Inventario',
           icon: require('../../assets/icons/046-shopping cart.png'),

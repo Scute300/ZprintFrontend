@@ -2,7 +2,9 @@
   <div>
     <Navbar />
     <div class="container">
-      <HeaderDetailScreen />
+      <HeaderDetailScreen 
+        :menuHeaders="menuHeaders"
+      />
       <div class="columns">
         <div class="column is-12">
           <div class="box">
@@ -151,7 +153,10 @@
             class="button is-success">
             Listo
           </button>
-          <button class="button is-danger">
+          <button 
+            @click="$router.go(-1)"
+            class="button is-danger"
+          >
             Cancelar
           </button>
         </div>
@@ -194,7 +199,25 @@ export default Vue.extend({
         marca: '',
         departamento: '',
         especificaciones: '',
-      }
+      },
+      menuHeaders: [
+        {
+          name: 'Detalle del Inventario',
+          url: '/Inventario/Detail',
+        },
+        {
+          name: 'Nuevo Producto',
+          url: '/Inventario/Detail/New/Product',
+        },
+        {
+          name: 'Nuevo Servicio',
+          url: '/New/Service',
+        },
+        {
+          name: 'Lista de Productos y Servicios',
+          url: '/Listadosyservicios',
+        },
+      ]
     }
   },
   methods: {
