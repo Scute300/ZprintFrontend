@@ -56,7 +56,7 @@ export default Vue.extend({
 }
 #bground {
   background-image: url('https://billypenn.com/wp-content/uploads/2020/04/liquorstore-lcb-markhenninger-01crop-1024x576.jpg');
-  height: 100 vh;
+  height: 101vh;
   background-position: center;
   background-size: cover;
 }
