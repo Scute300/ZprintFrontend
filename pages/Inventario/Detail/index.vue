@@ -84,6 +84,7 @@
                   :currentPage="page"
                   :onChangePage="getProducts"
                   :deleteAction="deleteProduct"
+                  :editAction="'Detail/update/'"
                 />
                   
                 </div> 

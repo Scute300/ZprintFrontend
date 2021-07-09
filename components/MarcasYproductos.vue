@@ -11,12 +11,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in filterColumns(items, filter)">
+            <tr v-for="(item, index) in filterColumns(items, filter)">
               <td>
                 {{item.name}}
               </td>
               <td>
-                <button class="button is-success">
+                <button 
+                  @click="edit(tipo, item.id, item.name, index)" 
+                  class="button is-success"
+                >
                   <i class="fas fa-edit"></i>
                 </button>
                 <button 
@@ -54,11 +57,12 @@ export default Vue.extend({
     tipo: {
       type: String,
       required: true
-    }
-  },
-  mounted(){
-    console.log(this.items)
-  },
+    },
+    edit: {
+      type: Function,
+      required: true
+    }, 
+  }, 
   data(){
     return{
       tableHeads: [

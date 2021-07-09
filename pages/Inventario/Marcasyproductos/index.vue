@@ -29,6 +29,13 @@
                   </div>
                   <div class="control">
                     <a
+                      v-if="edit.type !== '' && tipo.id == edit.type"
+                      @click="editItem(edit.type, myInput[tipo.id])"
+                      class="button is-success">
+                      <i class="fas fa-edit" />
+                    </a>
+                    <a
+                      v-else
                       @click="add(tipo.id, myInput[tipo.id])"
                       class="button is-success">
                       <i class="fas fa-save" />
@@ -42,6 +49,7 @@
               :filter="myInput[tipo.id]"
               :deleteI="deleteI"
               :tipo="tipo.id"
+              :edit="onEditPress"
             />
           </div>
         </div>
@@ -78,15 +86,32 @@ export default Vue.extend({
           nombre: 'Departamento',
           contenido: []
         }
-      ]
+      ],
+      edit: {
+        type: '',
+        edit: '',
+        index: ''
+      }
     }
   },
   methods: {
+    onEditPress(key, id, name, index){
+      this.edit = {
+        type: key,
+        edit: id,
+        index: index
+      }
+      this.myInput = {
+        ...this.myInput,
+        [key]: name
+      }
+
+    },
     add(type, nombreProduct){
       const token = JSON.parse(localStorage.getItem('token'))
       switch(type){
         case 'marca':
-          this.$axios.post('/api/newMarca', {
+          this.$axios.put('/api/updateMarca/', {
             nombre: nombreProduct
           },  { headers: { Authorization: `Bearer ${token.token}` } })
             .then(response => {
@@ -109,12 +134,38 @@ export default Vue.extend({
         break;
       }
     },
+    editItem(type, nombreProduct){
+      const token = JSON.parse(localStorage.getItem('token'))
+      switch(type){
+        case 'marca':
+          this.$axios.put('/api/updateMarca/'+this.edit.edit, {
+            nombre: nombreProduct
+          },  { headers: { Authorization: `Bearer ${token.token}` } })
+            .then(response => {
+              this.tipos[0].contenido.splice(1, this.edit.index, {
+                name: nombreProduct,
+                id: response.data.id
+              })
+            })
+        break;
+        case 'departamento' :
+          this.$axios.put('/api/updateDepartament/'+this.edit.edit, {
+            nombre: nombreProduct
+          },  { headers: { Authorization: `Bearer ${token.token}` } })
+            .then(response => {
+              this.tipos[1].contenido.splice(this.edit.index, 1, {
+                name: nombreProduct,
+                id: response.data.id
+              })
+            })
+        break;
+      }
+    },
     getInitials(){
       const token = JSON.parse(localStorage.getItem('token'))
       this.$axios.get('/api/marcasydepartamentos',
         { headers: { Authorization: `Bearer ${token.token}` } }
       ).then(response => {
-        console.log(response.data)
         const marcas = response.data?.marcas?.map( ( marca ) => {
           return {
             name: marca.name,

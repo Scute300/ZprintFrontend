@@ -7,7 +7,16 @@
       />
       <div class="columns">
         <div class="column is-12">
-          <h3 class="title is-3">Nuevo Empleado</h3>
+          <h3  
+            class="title is-3"
+            v-if="$route.params.action == 'new'"
+          >Nuevo Empleado</h3>
+          <h3
+            v-else
+            class="title is-3"
+          >
+            Editar empleado {{ form.name }}
+          </h3>
         </div>
       </div>
       <div class="columns">
@@ -22,18 +31,9 @@
             v-model="form.name"
             class="input is-success is-fullwidth" 
             type="text" 
-            placeholder="Ej: Juan"
+            placeholder="Ej: Juan Garcia"
           >           
-        </div>
-        <div class="column is-6">
-          <label class="label">Apellido *</label>
-           <input 
-            v-model="form.lastName"
-            class="input is-success is-fullwidth" 
-            type="text" 
-            placeholder="Ej: 'Gonzales'"
-          >
-        </div>
+        </div> 
       </div>
       <div class="columns">
         <div class="column is-12">
@@ -141,7 +141,7 @@
       <div class="columns">
         <div class="column">
           <button 
-            @click="addEmpleado"
+            @click="sendForm"
             class="button is-success">
             Listo
           </button>
@@ -165,11 +165,13 @@ import HeaderDetailScreen from '../../../components/HeaderDetailsScreen'
       Navbar,
       HeaderDetailScreen
     },
+    mounted(){
+      this.getDetails()
+    },
     data() {
       return{
         form: {
           name: '',
-          lastName: '',
           phone: '',
           email: '',
           sueldo: 0,
@@ -193,11 +195,18 @@ import HeaderDetailScreen from '../../../components/HeaderDetailsScreen'
       }
     },
     methods: {
+      sendForm(){
+        if (this.$route.params.action == 'update') {
+          this.updateEmpleado()
+        } else {
+          this.addEmpleado()
+        }
+      },
       addEmpleado(){
         let dateParts = this.form.contratacion.replace(/-/g, '/')
         const token = JSON.parse(localStorage.getItem('token'))
-        this.$axios.post('/api/newEmpleado', {
-          name: this.form.name+' '+this.form.lastName,
+        this.$axios.post('api/newEmpleado', {
+          name: this.form.name,
           phone: this.form.phone,
           email: this.form.email,
           sueldo: this.form.sueldo,
@@ -211,8 +220,47 @@ import HeaderDetailScreen from '../../../components/HeaderDetailsScreen'
         }).catch(error => {
           console.log(error)
         })
+      },
+      getDetails(){
+        if (this.$route.params.action == 'update') {
+          const token = JSON.parse(localStorage.getItem('token')) 
+          this.$axios.get('api/detailEmpleados/'+this.$route?.params.id, {
+            headers: { Authorization: `Bearer ${token.token}` }
+          }).then(({data}) => {
+            const obj = data.data
+            this.form = {
+              name: obj.name,
+              phone: obj.phone,
+              email: obj.email,
+              sueldo: obj.sueldo,
+              gender: obj.gender,
+              comision: obj.comision,
+              puesto: obj.puesto,
+              address: obj.adress,
+              contratacion: obj.fecha_contratacion.substring(0, 10),
+            }
+          })
+        }
+      },
+      updateEmpleado(){
+        let dateParts = this.form.contratacion.replace(/-/g, '/')
+        const token = JSON.parse(localStorage.getItem('token'))
+        this.$axios.put('api/updateEmpleado/'+this.$route.params.id, {
+          name: this.form.name,
+          phone: this.form.phone,
+          email: this.form.email,
+          sueldo: this.form.sueldo,
+          gender: this.form.gender,
+          comision: this.form.comision,
+          puesto: this.form.puesto,
+          address: this.form.address,
+          fecha_contratacion: new Date(dateParts).toISOString(),
+        },{ headers: { Authorization: `Bearer ${token.token}` }})
+        .then(() => {
+          this.$router.push('/Empleados')
+        })
       }
-    }
+    },
   }
 </script>
 

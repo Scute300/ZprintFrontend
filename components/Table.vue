@@ -34,7 +34,7 @@
                   </button>
                   <button
                     v-if="editAction !== undefined"
-                    @click="$router.push(editAction)"
+                    @click="$router.push(editAction+column.id)"
                     class="button is-success"
                   >
                     <i class="fas fa-edit"></i>

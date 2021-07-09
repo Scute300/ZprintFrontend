@@ -12,6 +12,7 @@
         :currentPage="page"
         :onChangePage="getEmpleados"
         :deleteAction="deleteEmpleado"
+        :editAction="'/Empleados/update/'" 
       /> 
     </div>
   </div>
@@ -86,7 +87,7 @@
         ).then(()=> {
           this.getEmpleados(this.page)
         })
-      }
+      },
     }
   }
 </script>

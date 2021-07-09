@@ -5,6 +5,13 @@
       <HeaderDetailScreen 
         :menuHeaders="menuHeaders"
       />
+      <div 
+        v-if="$route.params.action == 'update'"
+        class="columns">
+        <div class="column is-12">
+          <h3 class="title is-3">Editar Producto {{formulario.nombre}}</h3>
+        </div>
+      </div>
       <div class="columns">
         <div class="column is-12">
           <div class="box">
@@ -177,6 +184,7 @@ export default Vue.extend({
     ImageComponent
   },
   mounted(){
+    this.getDetails()
     this.getInitials()
   },
   data() {
@@ -224,6 +232,28 @@ export default Vue.extend({
     GoRoute(param) {
       this.$router.push(param)
     },
+    getDetails(){
+      if (this.$route.params.action == 'update') {
+        const token = JSON.parse(localStorage.getItem('token'))
+        this.$axios.get('/api/detailProduct/'+this.$route.params.id, {
+          headers: { Authorization: `Bearer ${token.token}`}
+        }).then(({data}) => {
+          let obj = data.data
+          this.formulario = {
+            image: obj.image,
+            codigoDeBarras: obj. codigo_de_barras,
+            nombre: obj.product_name,
+            precio: obj.precio,
+            precio2: obj.precio_segundo,
+            costo: obj.costo,
+            existencias: obj.existencias,
+            marca: obj.marca_id,
+            departamento: obj.departament_id,
+            especificaciones: obj.especificaciones
+          }
+        })       
+      }
+    },
     getInitials(){
       const token = JSON.parse(localStorage.getItem('token'))
       this.$axios.get('/api/marcasydepartamentos',
@@ -268,6 +298,13 @@ export default Vue.extend({
         reader.readAsDataURL(file);
     },
     sendForm(){
+      if (this.$route.params.action == 'update') {
+        this.updateProduct()  
+      } else {
+        this.newProduct()
+      }
+    },
+    newProduct(){
         const token = JSON.parse(localStorage.getItem('token'))
         const formSend = new FormData()
         formSend.append('imageProduct', this.fileTosend)
@@ -285,6 +322,26 @@ export default Vue.extend({
         .then( response => {
           this.$router.push('/Inventario/Detail')
         })
+    },
+    updateProduct(){
+      const token = JSON.parse(localStorage.getItem('token'))
+      const formSend = new FormData()
+      if (typeof(this.fileTosend) == 'object') {
+        formSend.append('imageProduct', this.fileTosend)
+      }
+      formSend.append('marca_id', this.formulario.marca) 
+      formSend.append('departament_id', this.formulario.departamento)
+      formSend.append('product_name', this.formulario.nombre)
+      formSend.append('codigo_de_barras', this.formulario.codigoDeBarras)
+      formSend.append('precio1', this.formulario.precio)
+      formSend.append('precio2', this.formulario.precio2)
+      formSend.append('costo', this.formulario.costo)
+      formSend.append('especificaciones', this.formulario.especificaciones)
+      formSend.append('existencias', this.formulario.existencias)
+
+      this.$axios.put('api/updateProduct/'+this.$route.params.id, 
+        formSend 
+      ,{headers: { Authorization: `Bearer ${token.token}` }})
     }
   },
 })
