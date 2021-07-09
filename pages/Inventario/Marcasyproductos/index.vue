@@ -111,7 +111,7 @@ export default Vue.extend({
       const token = JSON.parse(localStorage.getItem('token'))
       switch(type){
         case 'marca':
-          this.$axios.put('/api/updateMarca/', {
+          this.$axios.put('/api/newMarca/', {
             nombre: nombreProduct
           },  { headers: { Authorization: `Bearer ${token.token}` } })
             .then(response => {
